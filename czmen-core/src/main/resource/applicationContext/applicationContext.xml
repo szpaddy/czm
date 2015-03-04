@@ -1,0 +1,140 @@
+﻿<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<context:component-scan base-package="com.czmen.core.service" />
+	
+	<context:annotation-config />
+	<tx:annotation-driven />
+    <task:executor id="executor" pool-size="5" />  
+    <task:scheduler id="scheduler" pool-size="10" />  
+    <task:annotation-driven executor="executor" scheduler="scheduler" />
+
+	<context:property-placeholder location="classpath*:jdbc.properties"
+			ignore-unresolvable="true"/>
+	<context:property-placeholder location="classpath*:redis.properties"
+		system-properties-mode="OVERRIDE" ignore-resource-not-found="true"
+		ignore-unresolvable="true" />
+
+    <!-- 负责写的DB -->
+	<bean id="dataSourceWrite" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	      <!-- 基本属性 url、user、password -->
+	      <property name="url" value="${jdbc.master.url}" />
+	      <property name="username" value="${jdbc.master.username}" />
+	      <property name="password" value="${jdbc.master.password}" />
+	
+	      <!-- 配置初始化大小、最小、最大 -->
+	      <property name="initialSize" value="${jdbc.master.initialSize}" />
+	      <property name="minIdle" value="${jdbc.master.minIdle}" /> 
+	      <property name="maxActive" value="${jdbc.master.maxActive}" />
+	
+	      <!-- 配置获取连接等待超时的时间 -->
+	      <property name="maxWait" value="60000" />
+	
+	      <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	      <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	
+	      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	      <property name="minEvictableIdleTimeMillis" value="300000" />
+	
+	      <property name="validationQuery" value="SELECT '1'" />
+	      <property name="testWhileIdle" value="true" />
+	      <property name="testOnBorrow" value="true" />
+	      <property name="testOnReturn" value="false" />
+	
+	      <!-- 打开PSCache，并且指定每个连接上PSCache的大小 mysql false -->
+	      <property name="poolPreparedStatements" value="false" />
+	      <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	
+	      <!-- 配置监控统计拦截的filters -->
+	      <property name="filters" value="config,stat,log4j,wall" /> 
+      	  <property name="connectionProperties" value="config.decrypt=false" />
+	  </bean>
+	  
+	  <!-- 负责读的DB，测试环境与写是同一个 -->
+	  <bean id="dataSourceRead" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	      <!-- 基本属性 url、user、password -->
+	      <property name="url" value="${jdbc.slave.url}" />
+	      <property name="username" value="${jdbc.slave.username}" />
+	      <property name="password" value="${jdbc.slave.password}" />
+	
+	      <!-- 配置初始化大小、最小、最大 -->
+	      <property name="initialSize" value="${jdbc.slave.initialSize}" />
+	      <property name="minIdle" value="${jdbc.slave.minIdle}" /> 
+	      <property name="maxActive" value="${jdbc.slave.maxActive}" />
+	
+	      <!-- 配置获取连接等待超时的时间 -->
+	      <property name="maxWait" value="60000" />
+	
+	      <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	      <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	
+	      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	      <property name="minEvictableIdleTimeMillis" value="300000" />
+	
+	      <property name="validationQuery" value="SELECT '1'" />
+	      <property name="testWhileIdle" value="true" />
+	      <property name="testOnBorrow" value="false" />
+	      <property name="testOnReturn" value="false" />
+	
+	      <!-- 打开PSCache，并且指定每个连接上PSCache的大小 mysql false -->
+	      <property name="poolPreparedStatements" value="false" />
+	      <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	
+	      <!-- 配置监控统计拦截的filters -->
+	      <property name="filters" value="config,stat,log4j,wall" /> 
+      	  <property name="connectionProperties" value="config.decrypt=false" />
+	  </bean>
+
+	<!-- 可写的SessionFactory sqlWriteSessionFactory -->
+	<bean id="sqlWriteSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		scope="singleton">
+		<property name="dataSource" ref="dataSourceWrite" />
+		<property name="configLocation" value="classpath:applicationContext/mybatisConfig.xml" />
+	</bean>
+
+	<!-- 只读的SessionFactory sqlReadOnlySessionFactory -->
+	<bean id="sqlReadOnlySessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		scope="singleton">
+		<property name="dataSource" ref="dataSourceRead" />
+		<property name="configLocation" value="classpath:applicationContext/mybatisConfig.xml" />
+	</bean>
+
+	<bean id="writableSQLSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlWriteSessionFactory" />
+	</bean>
+
+	<bean id="readonlySQLSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlReadOnlySessionFactory" />
+	</bean>
+
+	<!-- 事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceWrite" />
+	</bean>
+
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- Service Bean -->
+	<bean id="userService" class="com.czmen.core.service.impl.UserServiceImpl"
+		scope="singleton">
+		<property name="writableSQLSession" ref="writableSQLSession" />
+		<property name="readonlySQLSession" ref="readonlySQLSession" />
+	</bean>
+
+    <!-- 备用dubbo, quartz等业务
+	<import resource="spring-provider.xml" />
+	<import resource="applicationContext-quartz.xml" />
+	  -->
+</beans>

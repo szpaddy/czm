@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- Maps '/' requests to the 'home' view -->
+	<mvc:view-controller path="/index" view-name="home"/>
+	 
+	<context:component-scan base-package="com.czmen.wireless.controller"/>	
+
+ 
+ 	<mvc:interceptors>
+ 	   
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<!-- 挂截通过TOTEN登录、redis会话自动延期 -->
+			<bean class="com.czmen.wireless.interceptor.SessionManageInterceptor">
+			<!-- 
+				<property name="userLoginService" ref="userLoginService" />
+				<property name="userService" ref="userService" />
+				<property name="commonService" ref="commonService" />
+			 -->
+			</bean>
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.czmen.wireless.interceptor.XSSSafeInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	 <!-- 自动注册了validator  ConversionService  -->
+    <mvc:annotation-driven validator="validator" conversion-service="conversion-service"/>
+    
+    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 自动注册-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass"  value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+     <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"  /> 
+	<context:component-scan base-package="com.czmen.wireless.validator" />
+</beans>

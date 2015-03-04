@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="czmen-core/src/main/java"/>
+	<classpathentry kind="src" path="czmen-mgmt/src/main/java"/>
+	<classpathentry kind="src" path="czmen-wechat/src/main/java"/>
+	<classpathentry kind="src" path="core-model/src/main/java"/>
+	<classpathentry kind="src" path="core-interface/src/main/java"/>
+	<classpathentry kind="src" path="czmen-wireless/src/main/java"/>
+	<classpathentry kind="src" path="zcmen-common/src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
