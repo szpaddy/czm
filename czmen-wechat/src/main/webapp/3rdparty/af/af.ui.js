@@ -86,7 +86,7 @@
                 var $el=$(document.body);
                 $el.removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android)
-                    $el.addClass("android");
+                    $el.addClass("android light");
                 else if ($.os.ie) {
                     $el.addClass("win8");
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {

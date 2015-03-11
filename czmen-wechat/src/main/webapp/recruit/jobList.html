@@ -10,36 +10,42 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" type="text/css" href="../thirdparty/af/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../3rdparty/af/icons.css" />
 
-    <link rel="stylesheet" type="text/css" href="../thirdparty/af/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="../3rdparty/af/af.ui.css" />
 
-     <script type="text/javascript" charset="utf-8" src="../thirdparty/jquery/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/ftlabs/fastclick.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.shim.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.ui.js"></script>
+     <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/ftlabs/fastclick.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.shim.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.ui.js"></script>
 
 
-    <script src="../thirdparty/af/af.desktopBrowsers.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.actionsheet.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.animation.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.touchEvents.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.popup.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.drawer.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.toast.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.animateheader.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.splashscreen.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../thirdparty/af/af.swipereveal.js"></script>
+    <script src="../3rdparty/af/af.desktopBrowsers.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.actionsheet.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.animation.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.touchEvents.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.popup.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.drawer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.toast.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.animateheader.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.splashscreen.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/af/af.swipereveal.js"></script>
 
 </head>
 
 <body >
     <div class="view" id="mainview">
-        <div class="pages">
-            
-             <div data-left-drawer="left" class="panel" id="plugins" data-title="plugins" data-selected="true">
-
+    	<header>My Header</header>
+        <div class="pages">            
+             <div class="panel" id="plugins" data-title="plugins" data-selected="true">				
                 <ul class="list">
+                    <li><a href="#login" data-transition="up-reveal">Login View (modal)</a></li>
+                    <li><a href="#drawer" >Drawer</a></li>
+                    <li><a href="ajax.html" >Ajax</a></li>
+                    <li><a href="#toast" >Toast</a></li>
+                    <li><a href="#popup" >Popup</a></li>
+                    <li><a href="#actionsheet">Actionsheet</a></li>
+                    <li><a href="#cards">cards</a></li>
                     <li><a href="#login" data-transition="up-reveal">Login View (modal)</a></li>
                     <li><a href="#drawer" >Drawer</a></li>
                     <li><a href="ajax.html" >Ajax</a></li>
@@ -49,10 +55,11 @@
                     <li><a href="#cards">cards</a></li>
                 </ul>
             </div>
-            <div class="panel" id="popup" data-title="Popup Plugin" data-include="partials/popup.html"></div>
-                
-
+            <div class="panel" id="popup" data-title="Popup Plugin" data-include="partials/popup.html"></div>    
         </div>
+        <footer>
+            <a href="#main" class="icon home">Home</a>
+        </footer>
     </div>
 
 
